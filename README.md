@@ -1,2 +1,2 @@
 # number_theory
-Yet another number theory crate.
+The purpose of this crate is for me to learn Rust. 
