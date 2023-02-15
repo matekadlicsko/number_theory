@@ -1,13 +1,15 @@
 pub mod polynomial;
 mod utils;
-use std::{array, any::type_name};
 
 pub use utils::*;
 pub mod primality;
 
-fn main() {
-    let mut a = [1; 3];
-    a[1] = 2;
-    println!("{:?}", a);
 
+fn main() {
+    let p = &polynomial::Polynomial{coeffs: vec![1,1]};
+    let q = &polynomial::Polynomial{coeffs: vec![1,1]};
+    println!("{}", p.degree()+ q.degree());
+    println!("2 * (1 + x) = {:?}", p + q);
+    println!("(1 + x)^2 = {:?}", p * q);
+    //println!("{:?}", [0; 10].to_vec());
 }
