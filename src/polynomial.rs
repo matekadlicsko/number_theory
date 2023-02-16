@@ -1,6 +1,6 @@
 use std::cmp::max;
 use std::ops::{Add, Mul, Sub};
-use num::traits::Zero;
+use num::traits::{Zero};
 
 #[derive(Debug)]
 #[derive(Clone)]

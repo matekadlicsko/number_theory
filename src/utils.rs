@@ -2,8 +2,7 @@ use std::{cmp::min, ops::Rem};
 use num::Zero;
 
 pub fn gcd<T>(mut a: T, mut b: T) -> T where
-    T: PartialEq + Rem<Output = T> + Zero +
-       Copy {
+    T: PartialEq + Rem<Output = T> + Zero + Clone {
     if a.is_zero() {
         return b;
     } else if b.is_zero() {
@@ -11,7 +10,7 @@ pub fn gcd<T>(mut a: T, mut b: T) -> T where
     }
     let mut t: T;
     while !b.is_zero() {
-        t = b;
+        t = b.clone();
         b = a % b;
         a = t;
     }
