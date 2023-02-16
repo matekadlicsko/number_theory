@@ -1,10 +1,9 @@
-
-//mod utils;
 pub use crate::utils::{mod_exp, jacobi, is_perfect_power};
 pub use rand::{seq::IteratorRandom, thread_rng};
 
 pub mod probabilistic { 
-    use {super::mod_exp, super::jacobi, super::IteratorRandom, super::thread_rng};   
+    use super::*;
+
     pub fn fermat_primality_test(n: u64, n_iter: usize) -> bool {
         let mut rng = thread_rng();
         let v: Vec<u64> = (2..n).collect();
@@ -81,6 +80,7 @@ pub mod deterministic {
     use super::is_perfect_power;
 
     pub fn aks(n: u64) -> bool {
+        //TODO
         if is_perfect_power(n) {
             return false;
         }

@@ -1,19 +1,23 @@
-use std::cmp::min;
+use std::{cmp::min, ops::Rem};
+use num::Zero;
 
-pub fn gcd(mut a: u64, mut b: u64) -> u64 {
-    if a == 0 {
+pub fn gcd<T>(mut a: T, mut b: T) -> T where
+    T: PartialEq + Rem<Output = T> + Zero +
+       Copy {
+    if a.is_zero() {
         return b;
-    } else if b == 0 {
+    } else if b.is_zero() {
         return a;
     }
-    let mut t: u64;
-    while b != 0 {
+    let mut t: T;
+    while !b.is_zero() {
         t = b;
         b = a % b;
         a = t;
     }
     return a
 }
+
 
 pub fn bgcd(mut a: u64, mut b: u64) -> u64 {
     if a == 0 {
@@ -87,6 +91,10 @@ pub fn mod_exp(a: u64, n: u64, m: u64) -> u64 {
 
 // jacobi(a,n) = (a / n)
 pub fn jacobi(mut a: u64, mut n: u64) -> i8 {
+    if n % 2 == 0 {
+        panic!("The Jacobi symbol (a / b) is not defined for even b.");
+    }
+
     a = a % n;
     let mut t: i8 = 1;
     let mut r: u64;
@@ -127,9 +135,11 @@ pub fn is_perfect_kth_power(n: u64, power: u64) -> bool {
     loop {
         let t: u64 = approximation.pow((power - 1) as u32);
         let b: u64 = ((power - 1) * approximation * t + n) / (power * t);
-        if approximation >= b {
+        if approximation <= b {
             approximation = b;
             break;
+        } else {
+            approximation = b;
         }
     }
     if n == approximation.pow(power as u32) {
