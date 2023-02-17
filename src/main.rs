@@ -9,7 +9,6 @@ fn main() {
 
 
 
-
 #[cfg(test)]
 mod tests {
     use num::ToPrimitive;
@@ -56,16 +55,23 @@ mod tests {
     }
 
     #[test]
-    fn test_polynomials() {
+    fn test_polynomial_ops() {
         let p = &polynomial::Polynomial{coeffs: vec![1,1]};
         let q = &polynomial::Polynomial{coeffs: vec![1, 2, 1]};
         let r = &polynomial::Polynomial{coeffs: vec![2, 3, 1]};
         assert_eq!(p * p, *q);
         assert_eq!(p + q, *r);
 
+        //  trailing zero test
+        let t = &polynomial::Polynomial{coeffs: vec![1,1]};
+        let u = &polynomial::Polynomial{coeffs: vec![1, 1, 0]};
+        assert_eq!(t, u);
+    }
 
-        let s = &polynomial::Polynomial{coeffs: vec![1, 1, 0]};
-        
-        assert_eq!(*p, *s);
+    #[test]
+    fn test_polynomial_call() {
+        let q = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
+        assert_eq!(q.call(0), 1);
+        assert_eq!(q.call(-1), 0);
     }
 }
