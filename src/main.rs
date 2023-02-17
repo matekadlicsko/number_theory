@@ -3,16 +3,17 @@ mod utils;
 
 pub use utils::*;
 pub mod primality;
-use num::BigInt;
 
 fn main() {
 }
 
 
+
+
 #[cfg(test)]
 mod tests {
     use num::ToPrimitive;
-
+    use num::BigInt;
     use super::*;
 
     #[test]
@@ -59,7 +60,12 @@ mod tests {
         let p = &polynomial::Polynomial{coeffs: vec![1,1]};
         let q = &polynomial::Polynomial{coeffs: vec![1, 2, 1]};
         let r = &polynomial::Polynomial{coeffs: vec![2, 3, 1]};
-        assert_eq!((p * p).coeffs, q.coeffs);
-        assert_eq!((p + q).coeffs, r.coeffs);
+        assert_eq!(p * p, *q);
+        assert_eq!(p + q, *r);
+
+
+        let s = &polynomial::Polynomial{coeffs: vec![1, 1, 0]};
+        
+        assert_eq!(*p, *s);
     }
 }

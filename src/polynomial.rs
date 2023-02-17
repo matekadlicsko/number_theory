@@ -1,4 +1,4 @@
-use std::cmp::max;
+use std::cmp::{max, PartialEq};
 use std::ops::{Add, Mul, Sub};
 use num::traits::{Zero};
 
@@ -62,5 +62,17 @@ impl<T> Mul<&Polynomial<T>> for &Polynomial<T> where
             }
         }
         return Polynomial{ coeffs };        
+    }
+}
+
+impl<T> PartialEq<Polynomial<T>> for Polynomial<T> where
+    T:  Add<Output = T> + Mul<Output = T> + Sub<Output = T> +
+        Clone + Copy + PartialEq + Zero {
+    fn eq(&self, other: &Polynomial<T>) -> bool {
+        self.drop_trailing_zeros().coeffs == other.drop_trailing_zeros().coeffs
+    }
+
+    fn ne(&self, other: &Polynomial<T>) -> bool {
+        self.drop_trailing_zeros().coeffs != other.drop_trailing_zeros().coeffs
     }
 }
