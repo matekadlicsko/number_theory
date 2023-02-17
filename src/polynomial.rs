@@ -2,10 +2,8 @@ use std::cmp::max;
 use std::ops::{Add, Mul, Sub};
 use num::traits::{Zero};
 
-#[derive(Debug)]
-#[derive(Clone)]
 
-
+#[derive(Clone, Debug)]
 pub struct Polynomial<T> {
     pub coeffs: Vec<T>
 }

@@ -1,8 +1,8 @@
-use std::{cmp::min, ops::Rem};
-use num::Zero;
+use std::{cmp::min, ops::{Rem, BitAnd, Shr, Shl, Sub, AddAssign, ShrAssign, SubAssign}};
+use num::{Zero, One};
 
 pub fn gcd<T>(mut a: T, mut b: T) -> T where
-    T: PartialEq + Rem<Output = T> + Zero + Clone {
+    T: Rem<Output = T> + Zero + Clone {
     if a.is_zero() {
         return b;
     } else if b.is_zero() {
@@ -18,45 +18,50 @@ pub fn gcd<T>(mut a: T, mut b: T) -> T where
 }
 
 
-pub fn bgcd(mut a: u64, mut b: u64) -> u64 {
-    if a == 0 {
+pub fn bgcd<T>(mut a: T, mut b: T) -> T where
+    T: Rem<Output = T> + Zero + One + Copy
+       + BitAnd<Output = T> + Shr<Output = T> 
+       + Shl<Output = T> + Sub<Output = T> 
+       + Ord + AddAssign + SubAssign + ShrAssign
+       {
+    if a.is_zero() {
         return b;
     }
-    else if b == 0 {
+    else if b.is_zero() {
         return a;
     }
 
     // We can assume that a and b are both odd
     // a = a' * 2^s, b = b' * 2^t, s <= t
-    let mut s: u64 = 0;
-    let mut t: u64 = 0;
+    let mut s: T = T::zero();
+    let mut t: T = T::zero();
 
-    while (a & 1) == 0 {
-        s += 1;
-        a = a >> 1;
+    while (a & T::one()).is_zero() {
+        s += T::one();
+        a >>= T::one();    
     }
     
-    while (b & 1) == 0 {
-        t += 1;
-        b = b >> 1;
+    while (b & T::one()).is_zero() {
+        t += T::one();
+        b >>= T::one();
     }
 
     s = min(s, t);
 
-    while b > 0 {
+    while !b.is_zero() {
         if a > b {
             // gcd(a', b') = gcd(a' - b', b')
             // a' - b' = 2 ^ r * x, r > 0
             // thus gcd(a', b') = gcd(b', x)
-            a = a - b;
-            while (a & 1) == 0 {a = a >> 1;}
+            a -= b;
+            while (a & T::one()).is_zero() {a >>= T::one();}
         }
         else if a < b {
-            b = b - a;
-            while (b & 1) == 0 {b = b >> 1;}
+            b -= a;
+            while (b & T::one()).is_zero() {b >>= T::one();}
         }
         else {
-            b = 0;
+            b = T::zero();
         }
     }
     // gcd(a, b) = 2^s * gcd(a', b') 
