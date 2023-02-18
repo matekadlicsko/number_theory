@@ -1,5 +1,5 @@
 use std::cmp::{max, PartialEq};
-use std::ops::{Add, Mul, Sub, AddAssign, MulAssign, Div};
+use std::ops::{Add, Mul, Sub, AddAssign, MulAssign};
 use num::traits::{Zero, One};
 
 #[derive(Clone, Debug)]

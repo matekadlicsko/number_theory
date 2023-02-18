@@ -1,5 +1,5 @@
 use std::{cmp::min, ops::{Rem, BitAnd, Shr, Shl, Sub, AddAssign, ShrAssign, SubAssign}};
-use num::{Zero, One};
+use num::{Zero, One, Integer};
 
 pub fn gcd<T>(mut a: T, mut b: T) -> T where
     T: Rem<Output = T> + Zero + Clone {
@@ -69,26 +69,20 @@ pub fn bgcd<T>(mut a: T, mut b: T) -> T where
 }
 
 
-#[allow(dead_code)]
-pub fn dumb_mod_exp(a: u64, n: u64, m: u64) -> u64 {
-    let mut t = 1;
-    for _i in 0..n {
-        t = t * a % m; 
-    }
-    return t % m;
-}
-
-pub fn mod_exp(a: u64, n: u64, m: u64) -> u64 {
-    let mut k = 0;
+pub fn mod_exp<T, U>(a: T, n: U, m: T) -> T where
+    U:  Integer + Shr<Output = U> + Ord + BitAnd<Output = U> + AddAssign + Clone,
+    T:  One + Rem<Output = T> + Clone {
     let mut an = a;
-    let mut result: u64 = 1;
+    let mut result: T = T::one();
 
-    while (n >> k) > 0 {
-        if (n >> k) & 1 == 1 {
-            result = (result * an) % m;
+    let mut x = n;
+
+    while x > U::zero() {
+        if (x.clone() & U::one()).is_one() {
+            result = (result * an.clone()) % m.clone();
         }
-        an = (an * an) % m;
-        k += 1;
+        an = (an.clone() * an.clone()) % m.clone();
+        x = x >> U::one();
     }
     return result;
 }
@@ -131,8 +125,13 @@ fn bit_length(n: u64) -> u64 {
     return t;
 }
 
+pub enum PerfectPower<T, U> {
+    NotPerfectPower,
+    Decomp(T, U)
+}
+
 // Newton-Raphson
-pub fn is_perfect_kth_power(n: u64, power: u64) -> bool {
+pub fn is_perfect_kth_power(n: u64, power: u64) -> PerfectPower<u64, u64> {
     assert!((n > 1) && (power > 1));
     let bitlength = bit_length(n);
     let mut approximation = 2u64.pow(((bitlength + power - 1) / power) as u32);
@@ -147,21 +146,21 @@ pub fn is_perfect_kth_power(n: u64, power: u64) -> bool {
         }
     }
     if n == approximation.pow(power as u32) {
-        return true;
+        return PerfectPower::Decomp(approximation, power);
     }
-    return false;
+    PerfectPower::NotPerfectPower
 }
 
-
-pub fn is_perfect_power(n: u64) -> bool {
+pub fn is_perfect_power(n: u64) -> PerfectPower<u64, u64> {
     let bl = bit_length(n);
 
     for k in 2..bl + 1 {
         // We need not check for composite k-s
         // TODO: check only for precomputed list of primes when possible.
-        if is_perfect_kth_power(n, k) {
-            return true;            
-        }
+        match is_perfect_kth_power(n, k) {
+            PerfectPower::Decomp(a, n) => return PerfectPower::Decomp(a, n),
+            _ => "do nothing?"
+        };
     }
-    return false;
+    return PerfectPower::NotPerfectPower;
 }
