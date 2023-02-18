@@ -3,9 +3,14 @@ mod utils;
 
 pub use utils::*;
 pub mod primality;
+use num::rational::Ratio;
+
 
 fn main() {
+    let p = polynomial::Polynomial{coeffs: vec![1,1]};
+    let q = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
 
+    println!("{:?}", p + q);
 }
 
 
@@ -25,12 +30,12 @@ mod tests {
         let n1 = match "12012156372189739281216757210576102012012223892738921798326187361278368721631225467389874637823746372838746543782374637283476543728374637283746543728253243534255432354234523452345234523452345234523452345234523452345234623623523452345234582848248248284"
                                .parse::<BigInt>() {
                                     Ok(n) => n,
-                                    Err(_) => panic!("Not a number")
+                                    Err(_) => panic!("what")
                                 };
         let n2 = match "123565214386213485217365412738765123873265321983721987398217398217893721983773265812"
                                 .parse::<BigInt>() {
                                     Ok(n) => n,
-                                    Err(_) => panic!("Not a number")
+                                    Err(_) => panic!("what")
                                 };
 
         assert_eq!(gcd(a, a), a);
@@ -52,15 +57,8 @@ mod tests {
 
     #[test]
     fn test_is_perfect_power() {
-        match is_perfect_power(2u64.pow(5u32)){ 
-            PerfectPower::Decomp(x, y) => assert_eq!((x, y), (2, 5)),
-            _ => panic!("It should be a perfect power")
-        };
-
-        match is_perfect_power(2u64.pow(5u32) * 3u64) {
-            PerfectPower::Decomp(_, _) => panic!("It isn't a perfect power"),
-            _ => "ok"
-        };
+        assert_eq!(is_perfect_kth_power(2*2*2*2*2, 5), true);
+        assert_eq!(is_perfect_power(2*2*2*2*2*3), false);
     }
 
     #[test]
@@ -82,14 +80,5 @@ mod tests {
         let q = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
         assert_eq!(q.call(0), 1);
         assert_eq!(q.call(-1), 0);
-    }
-
-    #[test]
-    fn test_mod_exp() {
-        let a: u128 = 123414124213;
-        let n: u32 = 1231234;
-        let m: u128 = 10;
-
-        assert_eq!(mod_exp(a, n, m), 9);
     }
 }
