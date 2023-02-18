@@ -3,6 +3,8 @@ mod utils;
 
 pub use utils::*;
 pub mod primality;
+use num::rational::Ratio;
+
 
 fn main() {
     let p = polynomial::Polynomial{coeffs: vec![1,1]};

@@ -2,7 +2,6 @@ use std::cmp::{max, PartialEq};
 use std::ops::{Add, Mul, Sub, AddAssign, MulAssign, Div};
 use num::traits::{Zero, One};
 
-
 #[derive(Clone, Debug)]
 pub struct Polynomial<T> {
     pub coeffs: Vec<T>
@@ -105,6 +104,7 @@ impl<T> Mul<Polynomial<T>> for Polynomial<T> where
         return Polynomial{ coeffs };        
     }
 }
+
 
 impl<T> PartialEq<Polynomial<T>> for Polynomial<T> where
     T:  Add<Output = T> + Mul<Output = T> + Sub<Output = T> +
