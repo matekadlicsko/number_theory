@@ -5,7 +5,12 @@ pub use utils::*;
 pub mod primality;
 
 fn main() {
+    let p = polynomial::Polynomial{coeffs: vec![1,1]};
+    let q = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
+
+    println!("{:?}", p + q);
 }
+
 
 
 
