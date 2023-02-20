@@ -250,11 +250,12 @@ impl<T> PartialEq<Polynomial<T>> for Polynomial<T> where
 macro_rules! forward_ref_ref_binop {
     (impl $imp:ident, $method:ident) => {
         impl<T> $imp<&Polynomial<T>> for &Polynomial<T> where
-            T:  AddAssign + Zero + PartialEq
-                + Mul<Output = T> + Sub<Output = T> + Clone {
+            T:  AddAssign + Zero + PartialEq + Clone
+                + Mul<Output = T> + Sub<Output = T>
+                + Div<Output = T> + AddAssign + SubAssign {
             type Output = Polynomial<T>;
 
-            fn $method(self, other: &Polynomial<T>) -> Polynomial<T> {
+            fn $method(self, other: &Polynomial<T>) -> Self::Output {
                 self.clone().$method(other.clone())
             }
         }
@@ -264,8 +265,8 @@ macro_rules! forward_ref_ref_binop {
 forward_ref_ref_binop!(impl Add, add);
 forward_ref_ref_binop!(impl Mul, mul);
 forward_ref_ref_binop!(impl Sub, sub);
-// forward_ref_ref_binop!(impl Div, div);
-// forward_ref_ref_binop!(impl Rem, rem);
+forward_ref_ref_binop!(impl Div, div);
+forward_ref_ref_binop!(impl Rem, rem);
 
 macro_rules! forward_ref_ref_scalar {
     (impl $imp:ident, $method:ident) => {
