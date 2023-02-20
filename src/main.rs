@@ -2,15 +2,15 @@ pub mod polynomial;
 mod utils;
 
 pub use utils::*;
-pub mod primality;
-use num::rational::Ratio;
 
+use crate::polynomial::Polynomial;
+pub mod primality;
 
 fn main() {
-    let p = polynomial::Polynomial{coeffs: vec![1,1]};
-    let q = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
+    let p: Polynomial<u128> = polynomial::Polynomial{coeffs: vec![1,1]};
+    let q:Polynomial<u128> = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
 
-    println!("{:?}", p + q);
+    println!("{:?}",  ((p.clone() * 2) / (q.clone() * 3)));
 }
 
 
