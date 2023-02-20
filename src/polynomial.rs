@@ -1,4 +1,5 @@
 use std::cmp::{max, PartialEq};
+use std::fmt::Display;
 use std::ops::{Add, Mul, Sub, SubAssign, AddAssign, MulAssign, Div, Rem};
 use num::traits::{Zero, One};
 
@@ -8,7 +9,51 @@ pub struct Polynomial<T> {
     pub coeffs: Vec<T>
 }
 
-impl<T> Polynomial<T> where T: Clone + Zero {
+impl<T: Zero + Add<Output = T> + PartialEq + Clone + One + ToString> Display for Polynomial<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.is_zero() {
+            return write!(f, "{}", 0);
+        }
+        let mut result = String::new();
+
+        let constant = self.nth_coeff(&0);
+
+        if !constant.is_zero() {
+            result += &constant.to_string();
+            result += " + ";
+        }
+
+        for (deg, coeff) in self.coeffs.iter().enumerate() {
+            if deg > 1 {
+                if (deg > 1) & coeff.is_one() {
+                    result += "x^";
+                    result += &deg.to_string();
+                    result += " + ";
+                } else if (deg > 1) & !coeff.is_zero() {
+                    result += &coeff.to_string();
+                    result += "x^";
+                    result += &deg.to_string();
+                    result += " + ";
+                }
+            } else if deg == 1 { 
+                if coeff.is_one() {
+                    result += "x";
+                    result += " + ";
+                } else if !coeff.is_zero() {
+                    result += &coeff.to_string();
+                    result += "x";
+                    result += " + ";
+                }
+            }
+        }
+
+        let length = result.len();
+        write!(f, "{}", result[..length - 3].to_string())  // leave out " + " at the end 
+    }
+}
+
+
+impl<T: Clone + Zero> Polynomial<T> {
     pub fn nth_coeff(&self, &n: &usize) -> T {
         if n < self.coeffs.len() {
             return self.coeffs[n].clone();

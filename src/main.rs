@@ -10,7 +10,7 @@ fn main() {
     let p: Polynomial<u128> = polynomial::Polynomial{coeffs: vec![1,1]};
     let q:Polynomial<u128> = polynomial::Polynomial{coeffs: vec![1, 2, 1]};
 
-    println!("{:?}",  ((p.clone() * 2) / (q.clone() * 3)));
+    println!("({}) * ({}) = {}", p.clone(), q.clone(), p * q);
 }
 
 
